@@ -1,2 +1,5 @@
 flask
 flask_appbuilder
+alembic
+psycopg2-binary
+python-dotenv
