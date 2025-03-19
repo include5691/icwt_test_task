@@ -7,6 +7,8 @@ Create Date: 2025-03-19 18:02:21.371992
 """
 from typing import Sequence, Union
 
+import random
+from datetime import datetime
 from alembic import op
 import sqlalchemy as sa
 
@@ -17,6 +19,13 @@ down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
+PRODUCTS = {
+    "Toys": ["Doll", "Puzzle", "Lego", "Car", "Ball", "Yo-yo", "Teddy", "Drone", "Kite", "Slime"],
+    "Tools": ["Hammer", "Screwdriver", "Wrench", "Drill", "Saw", "Pliers", "Tape Measure", "Chisel", "Level", "Clamp"],
+    "Books": ["Novel", "Biography", "Cookbook", "Comics", "Dictionary", "Poetry", "History", "Mystery", "Fantasy", "Science"],
+    "Shoes": ["Sneakers", "Boots", "Loafers", "Sandals", "Slippers", "Heels", "Flats", "Moccasins", "Clogs", "Wedges"],
+    "Gifts": ["Mug", "Watch", "Scarf", "Candle", "Perfume", "Photo Frame", "Keychain", "Chocolate Box", "Notebook", "Bracelet"]
+}
 
 def upgrade() -> None:
     """Upgrade schema."""
@@ -43,6 +52,45 @@ def upgrade() -> None:
     )
     # ### end Alembic commands ###
 
+
+    # Create test data
+    categories_table = sa.table('categories',
+        sa.column('id', sa.Integer),
+        sa.column('name', sa.String),
+    )
+
+    products_table = sa.table('products',
+        sa.column('id', sa.Integer),
+        sa.column('name', sa.String),
+        sa.column('category_id', sa.Integer),
+    )
+
+    sales_table = sa.table('sales',
+        sa.column('id', sa.Integer),
+        sa.column('product_id', sa.Integer),
+        sa.column('quantity', sa.Integer),
+        sa.column('dttm', sa.DateTime),
+    )
+
+    op.bulk_insert(categories_table,
+        [{'name': category} for category in PRODUCTS]
+    )
+
+    products = []
+    for i, category in enumerate(PRODUCTS):
+        for product in PRODUCTS[category]:
+            products.append({'name': product, 'category_id': i+1})
+    op.bulk_insert(products_table, products)
+
+    sales = []
+    for i, product in enumerate(products):
+        for _ in range(random.randint(1, 10)):
+            sales.append({
+                'product_id': i+1,
+                'quantity': random.randint(1, 20),
+                'dttm': datetime.fromtimestamp(random.randint(int(datetime.now().timestamp() - 180 * 86400), int(datetime.now().timestamp())))
+                })
+    op.bulk_insert(sales_table, sales)
 
 def downgrade() -> None:
     """Downgrade schema."""
