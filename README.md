@@ -49,6 +49,9 @@ docker run --name icwt_test --network="host" your_login/your_repo:icwt_test
 
 ## Products API
 
+__NOTE__:
+In this test app I used /api/v1 base route prefix since i don't find how to change it
+
 ### Get All Products
 
 Retrieves a list of all products.
