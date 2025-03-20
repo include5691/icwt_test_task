@@ -35,6 +35,18 @@ cd ..
 python3 -m task.main # run as module
 ```
 
+## Setup with Docker
+
+### Create docker image
+```shell
+docker build -t your_login/your_repo:icwt_test .
+```
+
+### Run docker container
+```shell
+docker run --name icwt_test --network="host" your_login/your_repo:icwt_test
+```
+
 ## Products API
 
 ### Get All Products
