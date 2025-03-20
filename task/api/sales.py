@@ -5,12 +5,14 @@ from flask_appbuilder.api import BaseApi, expose
 from task.models.sale import Sale
 from task.models.product import Product
 from task.extensions import db
+from .cache import cached
 
 class SalesApi(BaseApi):
 
     resource_name = "sales"
 
     @expose(url='/total', methods=["GET"])
+    @cached
     def get_sales_sum(self):
         """
         Get sum of all sales
@@ -49,6 +51,7 @@ class SalesApi(BaseApi):
             return self.response(500, **{"error": str(e)})
 
     @expose(url='/top-products', methods=["GET"])
+    @cached
     def get_top_products(self):
         """
         Get top products by sales

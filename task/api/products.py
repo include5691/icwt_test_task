@@ -2,12 +2,14 @@ from flask import request
 from flask_appbuilder.api import BaseApi, expose
 from task.models.product import Product
 from task.extensions import db
+from .cache import cached
 
 class ProductsApi(BaseApi):
 
     resource_name = "products"
 
     @expose(url='', methods=["GET"])
+    @cached
     def get_products(self):
         """
         Get all products
