@@ -6,6 +6,7 @@ logging.basicConfig(level=logging.INFO)
 
 from task.app import get_app
 from task.api.products import ProductsApi
+from task.api.sales import SalesApi
 from task.extensions import db, appbuilder
 
 if __name__ == "__main__":
@@ -15,5 +16,6 @@ if __name__ == "__main__":
         db.init_app(app)
         appbuilder.init_app(app, session=db.session)
         appbuilder.add_api(ProductsApi)
+        appbuilder.add_api(SalesApi)
 
     app.run(port=8000)

@@ -7,7 +7,7 @@ class ProductsApi(BaseApi):
 
     resource_name = "products"
 
-    @expose(url='/', methods=["GET"])
+    @expose(url='', methods=["GET"])
     def get_products(self):
         """
         Get all products
@@ -22,7 +22,7 @@ class ProductsApi(BaseApi):
         products = db.session.query(Product).all()
         return self.response(200, **{"products": [product.to_json() for product in products]})
 
-    @expose(url='/', methods=["POST"])
+    @expose(url='', methods=["POST"])
     def create_product(self):
         """
         Create a new product
@@ -53,7 +53,7 @@ class ProductsApi(BaseApi):
         db.session.commit()
         return self.response(200, **{"product": product.to_json()})
     
-    @expose(url='/<int:product_id>/', methods=["PUT"])
+    @expose(url='/<int:product_id>', methods=["PUT"])
     def update_product(self, product_id):
         """
         Update a product
@@ -94,7 +94,7 @@ class ProductsApi(BaseApi):
         db.session.commit()
         return self.response(200, **{"product": product.to_json()})
     
-    @expose(url='/<int:product_id>/', methods=["DELETE"])
+    @expose(url='/<int:product_id>', methods=["DELETE"])
     def delete_product(self, product_id):
         """
         Delete a product
